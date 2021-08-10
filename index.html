@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>問問題 | 新竹高中科學研究社</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+</head>
+<body>
+  <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="/question/">
+        <h5 class="title is-5">新竹高中科學研究社</h5>
+      </a>
+    </div>
+  </nav>
+
+  <section class="hero is-medium is-warning">
+    <div class="hero-body">
+      <p class="title">
+        問問題
+      </p>
+      <p class="subtitle">
+        新竹高中科學研究社
+      </p>
+    </div>
+  </section>
+
+  <div class="container">
+    <form>
+      <div class="field">
+        <p class="control has-icons-left">
+          <input id="field_email" class="input is-large" type="email" name="entry.1802282137" placeholder="Email">
+          <span class="icon is-small is-left">
+            <i class="fas fa-envelope"></i>
+          </span>
+        </p>
+      </div>
+      <div class="field">
+        <div class="control">
+          <textarea id="field_question" required class="textarea is-large" name="entry.1879562352" placeholder="您的問題..."></textarea>
+        </div>
+      </div>
+      <button type="button" id="submit_button" class="button is-primary is-large is-fullwidth">送出提問</button>
+    </form>
+    <a class="button is-small is-fullwidth" href="https://docs.google.com/forms/d/e/1FAIpQLSeRWjKsYZ316jlDDo-3dvIZm6qSv2Ij0_W10tGvh4D1fEtd9A/viewform?usp=sf_link" target="_blank" rel="nofollow noopener">從原網頁填寫</a>
+  </div>
+  <footer class="footer">
+    <div class="content has-text-centered">
+      <p>
+        <strong>問問題</strong> by <a target="_blank" href="https://hcsc-25th.github.io/">HCSC</a>
+      </p>
+    </div>
+  </footer>
+
+<script>
+
+let submit_button = document.getElementById('submit_button')
+submit_button.addEventListener('click', submit_form)
+
+let email = null
+let question = null
+
+function submit_form() {
+  email = document.getElementById('field_email').value;
+  question = document.getElementById('field_question').value;
+
+  if (email != ''){
+    let isemail = ValidateEmail(email)
+    if (isemail === true){
+      if (question != '') {
+        post()
+      }else{
+        alert('未填完整！')
+      }
+    }else{
+      alert('email格式不正確！')
+    }
+  }else{
+    if (question != '') {
+      post()
+    }else{
+      alert('未填完整！')
+    }
+  }
+}
+
+function post() {
+  let data = {
+    'entry.1802282137': email,
+    'entry.1879562352':question
+  };
+
+  $.ajax({
+    type: 'POST',
+    url: 'https://docs.google.com/forms/d/e/1FAIpQLSeRWjKsYZ316jlDDo-3dvIZm6qSv2Ij0_W10tGvh4D1fEtd9A/formResponse',
+    data: data,
+    contentType: 'application/json',
+    dataType: 'jsonp',
+    complete: function() {
+      alert('資料已送出！');
+    }
+  });
+
+  document.getElementById('field_email').value = ''
+  document.getElementById('field_question').value = ''
+}
+
+function ValidateEmail(mail) {
+  if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){
+    return (true)
+  }
+  return (false)
+}
+
+</script>
+
+</body>
+</html>
